@@ -1,3 +1,5 @@
+These all are valid in Pycharm and running commands use terminal of pycharm(for easyness)
+
 1.first install pip
 sudo apt-get install python-pip
 
