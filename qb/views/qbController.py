@@ -59,21 +59,47 @@ def qbmain():
                 comparehelper.filterresults(result)
                 theresult.append(result)
             theresult = filter(None, theresult)
-            return render_template('result.html', theresult=theresult)
+            theresult=remove_empty(theresult)
+            if len(theresult)==0:
+                return render_template("success.html")
+            else:
+                return render_template('result.html', theresult=theresult)
         except:
             print  sys.exc_info()
             return redirect("/qbmain")
 
 
+#Insert the Unique Fields Here
+def getuniquefieldforentity(entity):
+    field=""
+    if entity=="Customer":
+        field="DisplayName"
+    return field
+
+def remove_empty(l):
+    return tuple(filter(lambda x:not isinstance(x, (str, list, tuple)) or x, (remove_empty(x) if isinstance(x, (tuple, list)) else x for x in l)))
+
 
 def compare(list1, list2, entity):
     i = 0
     mainlist = []
-    while i < len(list1):
-        comparelist = comparehelper.compareDictOfDict(list1[i], list2[i])
-        comparelist.insert(0, "the " + entity + " ID is in qb1 is " + str(list1[i].get("Id")) + " and in qb2 is " + str(
-            list2[i].get("Id")))
+    field=getuniquefieldforentity(entity)
+    for item in list1:
+        flag=0
+        for anotheritem in list2:
+            if item.get(field)==anotheritem.get(field):
+                comparelist=comparehelper.compareDictOfDict(item,anotheritem)
+                flag=1
+        if flag==0:
+            comparelist.insert(item.get(field) +" is Not Found")
         mainlist.append(comparelist)
-        i += 1
     return mainlist
+
+    # while i < len(list1):
+    #     comparelist = comparehelper.compareDictOfDict(list1[i], list2[i])
+    #     comparelist.insert(0, "the " + entity + " ID is in qb1 is " + str(list1[i].get("Id")) + " and in qb2 is " + str(
+    #         list2[i].get("Id")))
+    #     mainlist.append(comparelist)
+    #     i += 1
+    # return mainlist
 
