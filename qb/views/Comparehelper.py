@@ -6,7 +6,7 @@ class Comparehelper():
     def __init__(self):
         print "Comparehelper"
 
-    def compareDictOfDict(self,dict1, dict2):
+    def compareDictOfDict(self,dict1, dict2,dictname):
         resultList = []
         for keys in dict1:
             # ignoring Time Stamp
@@ -21,7 +21,7 @@ class Comparehelper():
                     i=0
                     while(i<len(dict1.get(keys))):
                         if isinstance(dict1.get(keys)[i],dict):
-                            resultList.append(self.compareDictOfDict(dict1.get(keys)[i],dict2.get(keys)[i]))
+                            resultList.append(self.compareDictOfDict(dict1.get(keys)[i],dict2.get(keys)[i],keys))
                         i += 1
             try:
                 if "id" in str(keys).lower() or self.ifTimeStamp(str(dict1.get(keys))) != None:
@@ -33,13 +33,13 @@ class Comparehelper():
                     try:
                         if not isinstance(dict1.get(keys),list):
                             resultList.append(
-                                "the value of " + str(keys).upper() + " in qb1 is " + str
+                                "the value of " +str(dictname) +"."+str(keys).upper() + " in qb1 is " + str
                                 (dict1.get(keys)).upper() + " but in qb2 is " + str(
                                     dict2.get(keys)).upper())
                     except UnicodeEncodeError :
                         pass
             elif isinstance(dict1.get(keys), dict) and dict2.get(keys) != None:
-                resultList.append(self.compareDictOfDict(dict1.get(keys), dict2.get(keys)))
+                resultList.append(self.compareDictOfDict(dict1.get(keys), dict2.get(keys),keys))
             else:
                 resultList.append("the value of " + keys + " is present in qb1 but not in qb2")
 

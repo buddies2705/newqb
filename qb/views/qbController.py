@@ -99,7 +99,8 @@ def compare(list1, list2, entity):
         flag=0
         for anotheritem in list2:
             if item.get(field)==anotheritem.get(field):
-                comparelist=comparehelper.compareDictOfDict(item,anotheritem)
+                comparelist=comparehelper.compareDictOfDict(item,anotheritem,"main")
+                comparelist.insert(0,field + " is" + item.get(field))
                 flag=1
         if flag==0:
             comparelist.insert(0, item.get(field) + " is Not Found")
