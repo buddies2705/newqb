@@ -64,8 +64,9 @@ def qbmain():
                 return render_template("success.html")
             else:
                 return render_template('result.html', theresult=theresult)
-        except:
+        except Exception as e:
             print  sys.exc_info()
+	    print e
             return redirect("/qbmain")
 
 
@@ -74,6 +75,16 @@ def getuniquefieldforentity(entity):
     field=""
     if entity=="Customer":
         field="DisplayName"
+    if entity=="Item":
+        field="Name"
+    if entity=="Invoice":
+        field="DocNumber"
+    if entity=="Payment":
+        field="PaymentRefNum"
+    if entity=="Refund":
+        field="DocNumber"
+    if entity=="CreditMemo":
+        field="DocNumber"
     return field
 
 def remove_empty(l):
@@ -91,7 +102,7 @@ def compare(list1, list2, entity):
                 comparelist=comparehelper.compareDictOfDict(item,anotheritem)
                 flag=1
         if flag==0:
-            comparelist.insert(item.get(field) +" is Not Found")
+            comparelist.insert(0, item.get(field) + " is Not Found")
         mainlist.append(comparelist)
     return mainlist
 
